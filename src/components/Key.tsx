@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useRef } from 'react';
 import { NoteData } from '../data/Notes';
 import { KeyStyle } from '../styles/KeyStyle';
 import { ctx } from '../data/AudioContext';
@@ -22,12 +22,15 @@ export const Key: React.FC<Props> = ({ data }) => {
       oscillator.current!.stop(ctx.currentTime);
     }
   };
+  const sharp = data.note.length >= 2;
   return (
     <KeyStyle
       onMouseDown={() => start(data.freq)}
-      onMouseLeave={() => stop()}
-      onMouseUp={() => stop()}
+      onMouseLeave={stop}
+      onMouseUp={stop}
       onKeyDown={() => start(data.freq)}
+      sharp={sharp}
+      className={sharp ? 'black' : 'white'}
     >
       {data.note.join('/')}
     </KeyStyle>
