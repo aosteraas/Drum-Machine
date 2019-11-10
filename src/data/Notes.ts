@@ -1,6 +1,6 @@
 import { notes } from './RawNotes';
 
-interface NoteData {
+export interface NoteData {
   freq: number;
   note: string[];
 }
