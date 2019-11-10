@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 import { NoteData } from '../data/Notes';
 import { KeyStyle } from '../styles/KeyStyle';
 import { ctx } from '../data/AudioContext';
@@ -9,28 +9,35 @@ interface Props {
 
 export const Key: React.FC<Props> = ({ data }) => {
   let oscillator = useRef<OscillatorNode | null>(null);
-
+  const [playing, setPlaying] = useState(false);
   const start = (freq: number) => {
+    setPlaying(true);
     oscillator.current = ctx.createOscillator();
     oscillator.current.frequency.value = freq;
     oscillator.current.connect(ctx.destination);
     oscillator.current.start(0);
   };
+
   const stop = () => {
+    setPlaying(false);
     // in case the mouse up occurs over another element
     if (oscillator.current) {
       oscillator.current!.stop(ctx.currentTime);
     }
   };
+
   const sharp = data.note.length >= 2;
+
   return (
     <KeyStyle
       onMouseDown={() => start(data.freq)}
+      onMouseEnter={() => start(data.freq)}
       onMouseLeave={stop}
       onMouseUp={stop}
       onKeyDown={() => start(data.freq)}
       sharp={sharp}
       className={sharp ? 'black' : 'white'}
+      playing={playing}
     >
       {data.note.join('/')}
     </KeyStyle>

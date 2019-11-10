@@ -1,4 +1,4 @@
-import styled from 'styled-components/macro';
+import styled, { css } from 'styled-components/macro';
 
 export const Keyboard = styled.section`
   display: flex;
@@ -7,6 +7,7 @@ export const Keyboard = styled.section`
 
 interface KeyProps {
   sharp: boolean;
+  playing: boolean;
 }
 
 export const KeyStyle = styled.article<KeyProps>`
@@ -32,5 +33,9 @@ export const KeyStyle = styled.article<KeyProps>`
     border-radius: 0 0 5px 5px;
     box-shadow: -1px 0 0 rgba(255, 255, 255, 0.8) inset, 0 0 5px #ccc inset,
       0 0 3px rgba(0, 0, 0, 0.2);
+    background: ${p =>
+      p.playing
+        ? 'linear-gradient(to bottom, #eee 0%,#fff 100%)'
+        : 'linear-gradient(to bottom, #fff 0%, #e9e9e9 100%)'};
   }
 `;
