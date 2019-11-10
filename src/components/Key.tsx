@@ -8,21 +8,28 @@ interface Props {
 }
 
 export const Key: React.FC<Props> = ({ data }) => {
-  let oscillator = useRef<OscillatorNode | null>(null);
+  const oscillator = useRef<OscillatorNode | null>(null);
+  const gainNode = useRef<GainNode | null>(null);
+
   const [playing, setPlaying] = useState(false);
   const start = (freq: number) => {
     setPlaying(true);
     oscillator.current = ctx.createOscillator();
+    gainNode.current = ctx.createGain();
     oscillator.current.frequency.value = freq;
-    oscillator.current.connect(ctx.destination);
+    oscillator.current.connect(gainNode.current);
+    gainNode.current.connect(ctx.destination);
+    // oscillator.current.connect(ctx.destination);
     oscillator.current.start(0);
   };
 
   const stop = () => {
     setPlaying(false);
     // in case the mouse up occurs over another element
-    if (oscillator.current) {
-      oscillator.current!.stop(ctx.currentTime);
+    if (oscillator.current && gainNode.current) {
+      console.log(gainNode);
+      gainNode.current.gain.setTargetAtTime(0, ctx.currentTime, 0.015);
+      // oscillator.current!.stop(ctx.currentTime);
     }
   };
 
